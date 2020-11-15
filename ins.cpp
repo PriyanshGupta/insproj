@@ -25,6 +25,15 @@ void getDefaultMap() {
 	}
 }
 
+void removeSpaces(string &s)
+{
+	for (int i = 0; i < s.length(); i++)
+	{
+		if (s[i] == ' ')
+			s.erase(s.begin() + i);
+	}
+}
+
 string mutate(string key)
 {
 	int len = key.length();
@@ -188,6 +197,9 @@ int main()
 	getline(cin, key);
 	cout << "Enter Plaintext: ";
 	getline(cin, plaintext);
+
+	removeSpaces(key);
+	removeSpaces(plaintext);
 
 	unordered_map<char, pair<int, int>> valueMap1;
 	vector<vector<char>> matrix1 = make_matrix(key, valueMap1);
