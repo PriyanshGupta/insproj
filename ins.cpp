@@ -181,13 +181,34 @@ string decrypt(string ciphertext, vector<vector<char>> matrix, unordered_map<cha
 int main()
 {
 	getDefaultMap();
-	string key = "Hello";
+	string key;
+	string plaintext;
+
+	cout << "Enter Key: ";
+	getline(cin, key);
+	cout << "Enter Plaintext: ";
+	getline(cin, plaintext);
 
 	unordered_map<char, pair<int, int>> valueMap1;
 	vector<vector<char>> matrix1 = make_matrix(key, valueMap1);
-
+	cout << "\nFirst Matrix:" << endl;
 	printMatrix(matrix1);
-	string plaintext = "Priyaansh";
-	string ciphertext = encrypt(plaintext, matrix1, valueMap1);
-	cout << ciphertext << endl << decrypt(ciphertext, matrix1, valueMap1);
+
+	string ciphertext1 = encrypt(plaintext, matrix1, valueMap1);
+	cout << "\nText after first encyption: " << ciphertext1 << endl << endl;
+
+	string key2 = mutate(key);
+	cout << "New Key: " << key2 << endl;
+
+	unordered_map<char, pair<int, int>> valueMap2;
+	vector<vector<char>> matrix2 = make_matrix(key2, valueMap2);
+	cout << "\nSecond Matrix:" << endl;
+	printMatrix(matrix2);
+
+	string ciphertext2 = encrypt(ciphertext1, matrix2, valueMap2);
+	cout << "\nText after second encyption: " << ciphertext2 << endl << endl;
+
+	cout << "Encrypted Text: " << ciphertext2 << endl;
+	cout << "Final deciphered Text: " << decrypt(decrypt(ciphertext2, matrix2, valueMap2), matrix1, valueMap1) << endl;
+
 }
