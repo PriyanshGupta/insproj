@@ -107,19 +107,56 @@ void printMatrix(vector<vector<char>> m)
 	}
 }
 
-void encrypt(string plaintext, string key)
+string encrypt(string plaintext, vector<vector<char>> matrix, unordered_map<char, pair<int, int>> valueMap)
 {
-	unordered_map<char, pair<int, int>> map1;
-	vector<vector<char>> m1 = make_matrix(key, map1);
-	printMatrix(m1);
-	cout << defaultMap['H'].first << " " << defaultMap['H'].second << endl;
-	cout << map1['H'].first << " " << map1['H'].second << endl;
+	for (int i = 0; i < plaintext.length(); i += 2)
+	{
+		if (plaintext[i] == plaintext[i + 1])
+			plaintext.insert(i + 1, "x");
+	}
 
+	if (plaintext.length() % 2 != 0)
+		plaintext += "x";
+
+	string ans = "";
+
+	for (int i = 0; i < plaintext.length(); i += 2)
+	{
+		int row1 = valueMap[plaintext[i]].first;
+		int col1 = valueMap[plaintext[i]].second;
+		int row2 = valueMap[plaintext[i + 1]].first;
+		int col2 = valueMap[plaintext[i + 1]].second;
+
+		if (row1 == row2)
+		{
+			ans += matrix[row1][(col1 + 1) % 9];
+			ans += matrix[row1][(col2 + 1) % 9];
+		}
+		else if (col1 == col2)
+		{
+			ans += matrix[(row1 + 1) % 9][col1];
+			ans += matrix[(row2 + 1) % 9][col1];
+		}
+		else
+		{
+			ans += matrix[row1][col2];
+			ans += matrix[row2][col1];
+		}
+	}
+
+	return ans;
 }
 
 int main()
 {
 	getDefaultMap();
 	string key = "Hello";
-	encrypt("", key);
+
+	unordered_map<char, pair<int, int>> valueMap1;
+	vector<vector<char>> matrix1 = make_matrix(key, valueMap1);
+
+	printMatrix(matrix1);
+	string plaintext = "Priyaansh";
+	string ans = encrypt(plaintext, matrix1, valueMap1);
+	cout << ans << endl;
 }
