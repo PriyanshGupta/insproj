@@ -147,6 +147,37 @@ string encrypt(string plaintext, vector<vector<char>> matrix, unordered_map<char
 	return ans;
 }
 
+string decrypt(string ciphertext, vector<vector<char>> matrix, unordered_map<char, pair<int, int>> valueMap)
+{
+	string ans = "";
+
+	for (int i = 0; i < ciphertext.length(); i += 2)
+	{
+		int row1 = valueMap[ciphertext[i]].first;
+		int col1 = valueMap[ciphertext[i]].second;
+		int row2 = valueMap[ciphertext[i + 1]].first;
+		int col2 = valueMap[ciphertext[i + 1]].second;
+
+		if (row1 == row2)
+		{
+			ans += matrix[row1][(col1 + 8) % 9];
+			ans += matrix[row1][(col2 + 8) % 9];
+		}
+		else if (col1 == col2)
+		{
+			ans += matrix[(row1 + 8) % 9][col1];
+			ans += matrix[(row2 + 8) % 9][col1];
+		}
+		else
+		{
+			ans += matrix[row1][col2];
+			ans += matrix[row2][col1];
+		}
+	}
+
+	return ans;
+}
+
 int main()
 {
 	getDefaultMap();
@@ -157,6 +188,6 @@ int main()
 
 	printMatrix(matrix1);
 	string plaintext = "Priyaansh";
-	string ans = encrypt(plaintext, matrix1, valueMap1);
-	cout << ans << endl;
+	string ciphertext = encrypt(plaintext, matrix1, valueMap1);
+	cout << ciphertext << endl << decrypt(ciphertext, matrix1, valueMap1);
 }
